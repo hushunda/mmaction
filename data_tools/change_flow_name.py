@@ -49,7 +49,7 @@ def change_temp_name():
                     os.rename(in_path,out_path)
 
 if __name__ == '__main__':
-    change_temp_name()
+    change_name()
 
 
 
