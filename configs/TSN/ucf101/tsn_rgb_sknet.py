@@ -31,8 +31,8 @@ img_norm_cfg = dict(
    mean=[123.7, 116.3, 103.53], std=[58.4, 57.1, 57.4], to_rgb=False)
 
 data = dict(
-    videos_per_gpu=2,
-    workers_per_gpu=2,
+    videos_per_gpu=32,
+    workers_per_gpu=16,
     train=dict(
         type=dataset_type,
         ann_file='data/ucf101/ucf101_train_split_1_rawframes.txt',
@@ -117,7 +117,7 @@ log_config = dict(
     ])
 # yapf:enable
 # runtime settings
-total_epochs = 80
+total_epochs = 300
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/tsn_2d_rgb_sknet_seg_3_f1s1_b32_g8'
