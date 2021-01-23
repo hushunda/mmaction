@@ -7,7 +7,7 @@
 import os
 
 data_root = '../data/ucf101/rawframes'
-out_txt = './'
+out_txt = './nofinishvideo.txt'
 
 nofinish_video = []
 for cls in os.listdir(data_root):
@@ -22,6 +22,6 @@ for cls in os.listdir(data_root):
         nofinish_video.append(os.path.join(cls,video_name))
 
 print('num of no finish video:  ',len(nofinish_video))
-with open(out_txt) as f:
+with open(out_txt,'w') as f:
     for line in nofinish_video:
         f.writelines(line+'\n')
