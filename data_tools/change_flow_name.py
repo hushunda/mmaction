@@ -43,11 +43,10 @@ def change_HandstandPushups_name():
         v_path = os.path.join(out_root,file,v_n)
         if not os.path.isdir(v_path): continue
         for img_name in os.listdir(v_path):
-            if img_name.startswith('flow_u'):
-                in_path = os.path.join(v_path, img_name)
-                out_path =os.path.join(v_path.replace(file,out_file))#, img_name.replace('u','y'))
-                os.makedirs(out_path, exist_ok=True)
-                os.rename(in_path,os.path.join(out_path,img_name))
+            in_path = os.path.join(v_path, img_name)
+            out_path =os.path.join(v_path.replace(file,out_file))#, img_name.replace('u','y'))
+            os.makedirs(out_path, exist_ok=True)
+            os.rename(in_path,os.path.join(out_path,img_name))
 
 if __name__ == '__main__':
     change_name()
