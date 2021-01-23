@@ -70,7 +70,7 @@ def _dist_train(model, dataset, cfg, logger, validate=False):
             dist=True)
     ]
     # put model on gpus
-    find_unused_parameters = cfg.get('find_unused_parameters', False)
+    find_unused_parameters = cfg.get('find_unused_parameters', True)
     model = MMDistributedDataParallel(
         model.cuda(),
         device_ids=[torch.cuda.current_device()],
