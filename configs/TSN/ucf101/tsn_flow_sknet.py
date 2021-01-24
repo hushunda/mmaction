@@ -29,10 +29,10 @@ test_cfg = None
 dataset_type = 'RawFramesDataset'
 data_root = 'data/ucf101/rawframes'
 img_norm_cfg = dict(
-    mean=[123.7, 116.3, 103.53], std=[58.4, 57.1, 57.4], to_rgb=False)
+    mean=[116.3], std=[57.1], to_rgb=False)
 data = dict(
-    videos_per_gpu=32,
-    workers_per_gpu=2,
+    videos_per_gpu=16,
+    workers_per_gpu=8,
     train=dict(
         type=dataset_type,
         ann_file='data/ucf101/ucf101_train_split_1_rawframes.txt',
