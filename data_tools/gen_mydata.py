@@ -17,7 +17,7 @@ import os,glob
 def main():
     src_root = '../data/my_data/rawframes'
     out_root = '../data/my_data'
-    os.makedirs(os.path.join(out_root,'annotations'))
+    os.makedirs(os.path.join(out_root,'annotations'),exist_ok=True)
 
     all_cls = [x for x in os.listdir(src_root) if os.path.isdir(os.path.join(src_root,x))]
     all_cls.sort()
