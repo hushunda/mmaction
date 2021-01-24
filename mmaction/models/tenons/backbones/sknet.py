@@ -39,7 +39,7 @@ class SKnet101(nn.Module):
             c = checkpoint['state_dict']
             new_checkpoint = OrderedDict()
             for k in c:
-                n_k =  k.lstrip('module.')
+                n_k =  k[7:]
                 new_checkpoint[n_k] = c[k]
             self.model.load_state_dict(new_checkpoint)
 
