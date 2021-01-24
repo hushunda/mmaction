@@ -115,18 +115,21 @@ def parse_args():
 def main():
     global args
     args = parse_args()
-
+   
     if args.out is not None and not args.out.endswith(('.pkl', '.pickle')):
         raise ValueError('The output file must be a pkl file.')
-
+    cfg = mmcv.Config.fromfile(args.config)
+    if args.checkpoint ==None: 
+        args.checkpoint = os.path.join(cfg.work_dir,'latest.pth')
+    #cfg = mmcv.Config.fromfile(args.config)
     cfg = mmcv.Config.fromfile(args.config)
     # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
     cfg.data.test.test_mode = True
-
-    if cfg.checkpoint ==None:
-        cfg.checkpoint = os.path.join(cfg.work_dir,'latest.pth')
+    print(cfg)
+    #if args.checkpoint ==None:
+    #    args.checkpoint = os.path.join(cfg.work_dir,'latest.pth')
 
     # pass arg of fcn testing
     if args.fcn_testing:
