@@ -1,0 +1,3 @@
+[submodule "mmaction/third_party/ActivityNet"]
+	path = mmaction/third_party/ActivityNet
+	url = https://github.com/zhaoyue-zephyrus/ActivityNet
