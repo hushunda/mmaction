@@ -46,11 +46,11 @@ def main():
 
     with open(os.path.join(out_root,'my_data_val_split_1_rawframes.txt'),'w') as f:
         for i,l,x in test:
-            f.writelines(' '.join(map(str,[[x,l,i]]))+'\n')
+            f.writelines(' '.join(map(str,[x,l,i]))+'\n')
 
     with open(os.path.join(out_root,'my_data_test_split_1_rawframes.txt'),'w') as f:
         for i,l,x in test:
-            f.writelines(' '.join(map(str,[[x,l,i]]))+'\n')
+            f.writelines(' '.join(map(str,[x,l,i]))+'\n')
 
 
 
