@@ -282,6 +282,9 @@ def sknet152(pretrained=False, **kwargs):
 if __name__ == '__main__':
     '''test sknet101'''
     model = sknet101()
+    checkpoints = torch.load('../../../../pretrain_model/sknet101.pth')
+    print(checkpoints.keys())
+    model.load_state_dict(checkpoints['state_dict'])
     dum = torch.ones((2,3,224,224))
     out = model(dum)
     print(out.shape)

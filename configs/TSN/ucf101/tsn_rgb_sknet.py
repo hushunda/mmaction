@@ -28,11 +28,11 @@ test_cfg = None
 dataset_type = 'RawFramesDataset'
 data_root = 'data/ucf101/rawframes'
 img_norm_cfg = dict(
-   mean=[123.7, 116.3, 103.53], std=[58.4, 57.1, 57.4], to_rgb=False)
+   mean=[123.7, 116.3, 103.53], std=[1, 1, 1], to_rgb=False)
 
 data = dict(
-    videos_per_gpu=32,
-    workers_per_gpu=16,
+    videos_per_gpu=16,
+    workers_per_gpu=8,
     train=dict(
         type=dataset_type,
         ann_file='data/ucf101/ucf101_train_split_1_rawframes.txt',
@@ -104,7 +104,7 @@ optimizer_config = dict(grad_clip=dict(max_norm=40, norm_type=2))
 # learning policy
 lr_config = dict(
     policy='step',
-    step=[30, 60])
+    step=[30, 100,200])
 checkpoint_config = dict(interval=1)
 # workflow = [('train', 5), ('val', 1)]
 workflow = [('train', 1)]

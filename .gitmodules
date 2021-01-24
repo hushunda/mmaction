@@ -8,3 +8,6 @@
         path = third_party/dense_flow
         url = https://github.com/yjxiong/dense_flow
         branch = master
+[submodule "mmaction/third_party/ActivityNet"]
+	path = mmaction/third_party/ActivityNet
+	url = https://github.com/zhaoyue-zephyrus/ActivityNet
