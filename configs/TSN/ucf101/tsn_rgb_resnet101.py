@@ -105,7 +105,7 @@ optimizer_config = dict(grad_clip=dict(max_norm=40, norm_type=2))
 # learning policy
 lr_config = dict(
     policy='step',
-    step=[30, 120,180])
+    step=[30, 60])
 checkpoint_config = dict(interval=1)
 # workflow = [('train', 5), ('val', 1)]
 workflow = [('train', 1)]
@@ -118,7 +118,7 @@ log_config = dict(
     ])
 # yapf:enable
 # runtime settings
-total_epochs = 200
+total_epochs = 80
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/tsn_2d_rgb_resnet101_seg_3_f1s1_b32_g8'

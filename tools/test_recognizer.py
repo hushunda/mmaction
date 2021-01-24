@@ -158,7 +158,7 @@ def main():
         broadcast_buffers=False,
         find_unused_parameters=find_unused_parameters)
 
-    outputs = multi_test(model, data_loader)
+    outputs = multi_test(model, data_loader,cfg.work_dir)
 
     rank, _ = get_dist_info()
     if args.out and rank == 0:
@@ -174,6 +174,7 @@ def main():
             print("Averaging score over {} clips with softmax".format(outputs[0].shape[0]))
             results = [softmax(res, dim=1).mean(axis=0) for res in outputs]
         else:
+
             print("Averaging score over {} clips without softmax (ie, raw)".format(outputs[0].shape[0]))
             results = [res.mean(axis=0) for res in outputs]
         top1, top5 = top_k_accuracy(results, gt_labels, k=(1, 5))
