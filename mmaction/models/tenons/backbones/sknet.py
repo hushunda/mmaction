@@ -34,7 +34,15 @@ class SKnet101(nn.Module):
     def init_weights(self):
         if isinstance(self.pretrained, str):
             logger = logging.getLogger()
-            load_checkpoint(self, self.pretrained, strict=False, logger=logger)
+            #load_checkpoint(self, self.pretrained, strict=False, logger=logger)
+            checkpoint = torch.load(self.pretrained)
+            c = checkpoint['state_dict']
+            new_checkpoint = OrderedDict()
+            for k in c:
+                n_k =  k[7:]
+                new_checkpoint[n_k] = c[k]
+            self.model.load_state_dict(new_checkpoint)
+
         elif self.pretrained is None:
             for m in self.modules():
                 if isinstance(m, nn.Conv2d):
@@ -281,7 +289,21 @@ def sknet152(pretrained=False, **kwargs):
 
 if __name__ == '__main__':
     '''test sknet101'''
+    checkpoint = torch.load('../../../../pretrain_model/sknet101.pth')
     model = sknet101()
+    t = model.state_dict()
+    c = checkpoint['state_dict']
+    new_checkpoint = OrderedDict()
+    for k in t:
+        n_k = 'module.'+k
+        if n_k not in c:
+            print('not in loading dict! fill it',n_k)
+            c[n_k] = t[n_k]
+        else:
+            new_checkpoint[k] = c[n_k]
+    model.load_state_dict(new_checkpoint)
+
     dum = torch.ones((2,3,224,224))
+
     out = model(dum)
     print(out.shape)

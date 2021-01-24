@@ -28,7 +28,14 @@ class ResNet101(nn.Module):
     def init_weights(self):
         if isinstance(self.pretrained, str):
             logger = logging.getLogger()
-            load_checkpoint(self, self.pretrained, strict=False, logger=logger)
+            #load_checkpoint(self, self.pretrained, strict=False, logger=logger)
+            checkpoint = torch.load(self.pretrained)
+            c = checkpoint['state_dict']
+            new_checkpoint = OrderedDict()
+            for k in c:
+                n_k =  k[7:]
+                new_checkpoint[n_k] = c[k]
+            self.model.load_state_dict(new_checkpoint)
         elif self.pretrained is None:
             for m in self.modules():
                 if isinstance(m, nn.Conv2d):
