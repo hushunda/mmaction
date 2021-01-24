@@ -35,22 +35,22 @@ def main():
         len_data = [len(glob.glob(os.path.join(cls_path,x,'img_0*'))) for x in v_allname]
         split_idx = int(len(v_allname)*ratio)
 
-        v_len_name = [[l,os.path.join(cls,x)] for l,x in zip(v_allname,len_data)]
+        v_len_name = [[l,os.path.join(cls,x)] for l,x in zip(len_data,v_allname)]
 
         train.extend([[idx,l,x] for l,x in v_len_name[:split_idx]])
         test.extend([[idx,l,x] for l,x in v_len_name[split_idx:]])
 
     with open(os.path.join(out_root,'my_data_train_split_1_rawframes.txt'),'w') as f:
         for i,l,x in train:
-            f.writelines(' '.join(map(str,[l,x,i]))+'\n')
+            f.writelines(' '.join(map(str,[x,l,i]))+'\n')
 
     with open(os.path.join(out_root,'my_data_val_split_1_rawframes.txt'),'w') as f:
         for i,l,x in test:
-            f.writelines(' '.join(map(str,[l,x,i]))+'\n')
+            f.writelines(' '.join(map(str,[[x,l,i]]))+'\n')
 
     with open(os.path.join(out_root,'my_data_test_split_1_rawframes.txt'),'w') as f:
         for i,l,x in test:
-            f.writelines(' '.join(map(str,[l,x,i]))+'\n')
+            f.writelines(' '.join(map(str,[[x,l,i]]))+'\n')
 
 
 
