@@ -2,7 +2,7 @@
 model = dict(
     type='TSN2D',
     backbone=dict(
-        type='SKnet101',
+        type='ResNet101',
         pretrained='pretrain_model/resnet101.pth',
         bn_eval=False,
         partial_bn=True),
