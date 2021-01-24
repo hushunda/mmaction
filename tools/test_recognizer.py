@@ -1,5 +1,6 @@
 import argparse
-
+import os
+import pickle
 import torch
 import time
 import torch.distributed as dist
@@ -94,7 +95,7 @@ def collect_results(result_part, size, tmpdir=None):
 def parse_args():
     parser = argparse.ArgumentParser(description='Test an action recognizer')
     parser.add_argument('config', help='test config file path')
-    parser.add_argument('checkpoint', help='checkpoint file')
+    parser.add_argument('--checkpoint', default=None,help='checkpoint file')
     parser.add_argument(
         '--launcher',
         choices=['none', 'pytorch', 'mpi', 'slurm'],
@@ -123,6 +124,9 @@ def main():
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
     cfg.data.test.test_mode = True
+
+    if cfg.checkpoint ==None:
+        cfg.checkpoint = os.path.join(cfg.work_dir,'latest.pth')
 
     # pass arg of fcn testing
     if args.fcn_testing:
@@ -165,10 +169,19 @@ def main():
         print('writing results to {}'.format(args.out))
         mmcv.dump(outputs, args.out)
 
+        data_path = []
         gt_labels = []
+        pre = []
         for i in range(len(dataset)):
             ann = dataset.get_ann_info(i)
             gt_labels.append(ann['label'])
+            data_path.append(ann['path'])
+            pre.append(outputs[i].mean(axis=0))
+
+
+        save_data = {path:[p,g] for path,p,g in zip(data_path,pre,gt_labels)}
+        with open(os.path.join(cfg.work_dir,'test.pkl'),'wb') as f:
+            pickle.dump(save_data,f)
 
         if args.use_softmax:
             print("Averaging score over {} clips with softmax".format(outputs[0].shape[0]))
@@ -179,9 +192,9 @@ def main():
             results = [res.mean(axis=0) for res in outputs]
         top1, top5 = top_k_accuracy(results, gt_labels, k=(1, 5))
         mean_acc = mean_class_accuracy(results, gt_labels)
-        print("Mean Class Accuracy = {:.02f}".format(mean_acc * 100))
-        print("Top-1 Accuracy = {:.02f}".format(top1 * 100))
-        print("Top-5 Accuracy = {:.02f}".format(top5 * 100))
+        print("Mean Class Accuracy = {:.04f}".format(mean_acc * 100))
+        print("Top-1 Accuracy = {:.04f}".format(top1 * 100))
+        print("Top-5 Accuracy = {:.04f}".format(top5 * 100))
 
 
 if __name__ == '__main__':
