@@ -1,9 +1,11 @@
 # model settings
 model = dict(
     type='TSN2D',
+    modality='Flow',
+    in_channels=10,
     backbone=dict(
-        type='ResNet101',
-        pretrained='pretrain_model/resnet101.pth',
+        type='SKnet101',
+        pretrained='pretrain_model/sknet101.pth',
         bn_eval=False,
         partial_bn=True),
     spatial_temporal_module=dict(
@@ -18,9 +20,8 @@ model = dict(
         with_avg_pool=False,
         temporal_feature_size=1,
         spatial_feature_size=1,
-        dropout_ratio=0.8,
+        dropout_ratio=0.7,
         in_channels=2048,
-        init_std=0.001,
         num_classes=101))
 train_cfg = None
 test_cfg = None
@@ -28,22 +29,21 @@ test_cfg = None
 dataset_type = 'RawFramesDataset'
 data_root = 'data/ucf101/rawframes'
 img_norm_cfg = dict(
-   mean=[123.7, 116.3, 103.53], std=[58.4, 57.1, 57.4], to_rgb=False)
-
+    mean=[123.7, 116.3, 103.53], std=[58.4, 57.1, 57.4], to_rgb=False)
 data = dict(
-    videos_per_gpu=16,
-    workers_per_gpu=8,
+    videos_per_gpu=32,
+    workers_per_gpu=2,
     train=dict(
         type=dataset_type,
         ann_file='data/ucf101/ucf101_train_split_1_rawframes.txt',
         img_prefix=data_root,
         img_norm_cfg=img_norm_cfg,
         num_segments=3,
-        new_length=1,
+        new_length=5,
         new_step=1,
         random_shift=True,
-        modality='RGB',
-        image_tmpl='img_{:05d}.jpg',
+        modality='Flow',
+        image_tmpl='flow_{}_{:05d}.jpg',
         img_scale=256,
         input_size=224,
         div_255=False,
@@ -62,11 +62,11 @@ data = dict(
         img_prefix=data_root,
         img_norm_cfg=img_norm_cfg,
         num_segments=3,
-        new_length=1,
+        new_length=5,
         new_step=1,
         random_shift=False,
-        modality='RGB',
-        image_tmpl='img_{:05d}.jpg',
+        modality='Flow',
+        image_tmpl='flow_{}_{:05d}.jpg',
         img_scale=256,
         input_size=224,
         div_255=False,
@@ -83,12 +83,11 @@ data = dict(
         img_prefix=data_root,
         img_norm_cfg=img_norm_cfg,
         num_segments=25,
-        new_length=1,
+        new_length=5,
         new_step=1,
         random_shift=False,
-
-        modality='RGB',
-        image_tmpl='img_{:05d}.jpg',
+        modality='Flow',
+        image_tmpl='flow_{}_{:05d}.jpg',
         img_scale=256,
         input_size=224,
         div_255=False,
@@ -100,12 +99,12 @@ data = dict(
         multiscale_crop=False,
         test_mode=True))
 # optimizer
-optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0005)
-optimizer_config = dict(grad_clip=dict(max_norm=40, norm_type=2))
+optimizer = dict(type='SGD', lr=0.005, momentum=0.9, weight_decay=0.0005)
+optimizer_config = dict(grad_clip=dict(max_norm=20, norm_type=2))
 # learning policy
 lr_config = dict(
     policy='step',
-    step=[30, 120,180])
+    step=[190, 300])
 checkpoint_config = dict(interval=1)
 # workflow = [('train', 5), ('val', 1)]
 workflow = [('train', 1)]
@@ -118,10 +117,10 @@ log_config = dict(
     ])
 # yapf:enable
 # runtime settings
-total_epochs = 200
+total_epochs = 340
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/tsn_2d_rgb_resnet101_seg_3_f1s1_b32_g8'
+work_dir = './work_dirs/tsn_2d_flow_sknet_seg_3_f1s1_b32_g8_lr_0.005'
 load_from = None
 resume_from = None
 
