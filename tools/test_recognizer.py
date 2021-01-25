@@ -194,15 +194,17 @@ def main():
             results = [res.mean(axis=0) for res in outputs]
         top1, top5 = top_k_accuracy(results, gt_labels, k=(1, 5))
         mean_acc = mean_class_accuracy(results, gt_labels)
-        print("Mean Class Accuracy = {:.04f}".format(mean_acc * 100))
-        print("Top-1 Accuracy = {:.04f}".format(top1 * 100))
-        print("Top-5 Accuracy = {:.04f}".format(top5 * 100))
-
-        with open(os.path.join(cfg.work_dir,'test_result.txt'),'wb') as f:
+        with open(os.path.join(cfg.work_dir,'test_result.txt'),'w') as f:
             f.writelines('model is :'+args.checkpoint+'\n')
             f.writelines("Mean Class Accuracy = {:.04f}".format(mean_acc * 100)+'\n')
             f.writelines("Top-1 Accuracy = {:.04f}".format(top1 * 100)+'\n')
             f.writelines("Top-5 Accuracy = {:.04f}".format(top5 * 100)+'\n')
+
+        print("Mean Class Accuracy = {:.04f}".format(mean_acc * 100))
+        print("Top-1 Accuracy = {:.04f}".format(top1 * 100))
+        print("Top-5 Accuracy = {:.04f}".format(top5 * 100))
+
+
 
 
 if __name__ == '__main__':
