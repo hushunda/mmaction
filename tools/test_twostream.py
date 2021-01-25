@@ -46,3 +46,6 @@ def main():
     print("Mean Class Accuracy = {:.04f}".format(mean_acc * 100))
     print("Top-1 Accuracy = {:.04f}".format(top1 * 100))
     print("Top-5 Accuracy = {:.04f}".format(top5 * 100))
+
+if __name__ == '__main__':
+        main()

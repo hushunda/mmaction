@@ -95,7 +95,7 @@ def collect_results(result_part, size, tmpdir=None):
 def parse_args():
     parser = argparse.ArgumentParser(description='Test an action recognizer')
     parser.add_argument('config', help='test config file path')
-    parser.add_argument('--checkpoint', default=None,help='checkpoint file')
+    parser.add_argument('--checkpoint', default=297,help='checkpoint file')
     parser.add_argument(
         '--launcher',
         choices=['none', 'pytorch', 'mpi', 'slurm'],
