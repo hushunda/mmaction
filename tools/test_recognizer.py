@@ -121,15 +121,14 @@ def main():
     cfg = mmcv.Config.fromfile(args.config)
     if args.checkpoint ==None: 
         args.checkpoint = os.path.join(cfg.work_dir,'latest.pth')
-    #cfg = mmcv.Config.fromfile(args.config)
+    else:
+        args.checkpoint = os.path.join(cfg.work_dir,'epoch_%d.pth'%(int(args.checkpoint)))
+
     cfg = mmcv.Config.fromfile(args.config)
     # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
     cfg.data.test.test_mode = True
-    print(cfg)
-    #if args.checkpoint ==None:
-    #    args.checkpoint = os.path.join(cfg.work_dir,'latest.pth')
 
     # pass arg of fcn testing
     if args.fcn_testing:
@@ -198,6 +197,12 @@ def main():
         print("Mean Class Accuracy = {:.04f}".format(mean_acc * 100))
         print("Top-1 Accuracy = {:.04f}".format(top1 * 100))
         print("Top-5 Accuracy = {:.04f}".format(top5 * 100))
+
+        with open(os.path.join(cfg.work_dir,'test_result.txt'),'wb') as f:
+            f.writelines('model is :'+args.checkpoint+'\n')
+            f.writelines("Mean Class Accuracy = {:.04f}".format(mean_acc * 100)+'\n')
+            f.writelines("Top-1 Accuracy = {:.04f}".format(top1 * 100)+'\n')
+            f.writelines("Top-5 Accuracy = {:.04f}".format(top5 * 100)+'\n')
 
 
 if __name__ == '__main__':
