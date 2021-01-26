@@ -146,7 +146,7 @@ def main():
     else:
         distributed = True
         init_dist(args.launcher, **cfg.dist_params)
-
+         
     model = build_recognizer(cfg.model, train_cfg=None, test_cfg=cfg.test_cfg)
     data_loader = build_dataloader(
         dataset,

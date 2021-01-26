@@ -4,8 +4,8 @@ model = dict(
     backbone=dict(
         type='BNInception',
         pretrained='pretrain_model/bn_inception.pth',
-        bn_eval=True,
-        partial_bn=True),
+        bn_eval=False,
+        partial_bn=False),
     spatial_temporal_module=dict(
         type='SimpleSpatialModule',
         spatial_type='avg',
@@ -99,7 +99,7 @@ data = dict(
         multiscale_crop=False,
         test_mode=True))
 # optimizer
-optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0005)
+optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0005)
 optimizer_config = dict(grad_clip=dict(max_norm=40, norm_type=2))
 # learning policy
 lr_config = dict(
@@ -121,7 +121,7 @@ total_epochs = 80
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/mydata/tsn_2d_rgb_bninception_seg_3_f1s1_b32_g8'
-load_from = 'work_dirs/tsn_2d_rgb_bninception_seg_3_f1s1_b32_g8/latest.pth'
+load_from = None#'work_dirs/tsn_2d_rgb_bninception_seg_3_f1s1_b32_g8/latest.pth'
 resume_from = None
 
 
