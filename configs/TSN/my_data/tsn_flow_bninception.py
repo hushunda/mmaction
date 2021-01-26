@@ -5,8 +5,8 @@ model = dict(
     in_channels=10,
     backbone=dict(
         type='BNInception',
-        pretrained='work_dirs/tsn_2d_flow_bninception_seg_3_f1s1_b32_g8_lr_0.005/latest.pth',
-        bn_eval=False,
+        pretrained='pretrain_model/bn_inception.pth',
+        bn_eval=True,
         partial_bn=True),
     spatial_temporal_module=dict(
         type='SimpleSpatialModule',
@@ -121,7 +121,7 @@ total_epochs = 340
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/mydata/tsn_2d_flow_bninception_seg_3_f1s1_b32_g8_lr_0.005'
-load_from = None
+load_from = 'work_dirs/tsn_2d_flow_bninception_seg_3_f1s1_b32_g8_lr_0.005/latest.pth'
 resume_from = None
 
 

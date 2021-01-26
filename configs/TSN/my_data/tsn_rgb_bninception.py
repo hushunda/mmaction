@@ -3,8 +3,8 @@ model = dict(
     type='TSN2D',
     backbone=dict(
         type='BNInception',
-        pretrained='work_dirs/tsn_2d_rgb_bninception_seg_3_f1s1_b32_g8/latest.pth',
-        bn_eval=False,
+        pretrained='pretrain_model/bn_inception.pth',
+        bn_eval=True,
         partial_bn=True),
     spatial_temporal_module=dict(
         type='SimpleSpatialModule',
@@ -121,7 +121,7 @@ total_epochs = 80
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/mydata/tsn_2d_rgb_bninception_seg_3_f1s1_b32_g8'
-load_from = None
+load_from = 'work_dirs/tsn_2d_rgb_bninception_seg_3_f1s1_b32_g8/latest.pth'
 resume_from = None
 
 
