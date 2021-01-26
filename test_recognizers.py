@@ -80,8 +80,8 @@ class Recognize():
             f.writelines(' '.join(map(str,test_info)))
         return video_dir,test_split
 def test():
-    rgb_model_path = ''
-    video_path = ''
+    rgb_model_path = 'work_dirs/mydata/tsn_2d_rgb_sknet_seg_3_f1s1_b32_g8/latest.pth'
+    video_path = 'data/my_data/test.mov'
     model = Recognize(rgb_model_path)
     pre = model.run(video_path)
     print(pre)
