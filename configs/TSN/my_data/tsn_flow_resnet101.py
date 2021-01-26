@@ -29,7 +29,7 @@ test_cfg = None
 dataset_type = 'RawFramesDataset'
 data_root = 'data/my_data/rawframes'
 img_norm_cfg = dict(
-    mean=[116.3], std=57.1], to_rgb=False)
+    mean=[116.3], std=[57.1], to_rgb=False)
 data = dict(
     videos_per_gpu=8,
     workers_per_gpu=4,
@@ -121,7 +121,7 @@ total_epochs = 340
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/mydata/tsn_2d_flow_resnet101_seg_3_f1s1_b32_g8_lr_0.005'
-load_from = 'work_dirs/tsn_2d_flow_resnet101_seg_3_f1s1_b32_g8_lr_0.005l/latest.pth'
+load_from = 'work_dirs/tsn_2d_flow_resnet101_seg_3_f1s1_b32_g8_lr_0.005/latest.pth'
 resume_from = None
 
 
