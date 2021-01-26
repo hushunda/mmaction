@@ -32,7 +32,7 @@ def main():
         cls_path = os.path.join(src_root,cls)
         v_allname = [x for x in os.listdir(cls_path) if os.path.isdir(os.path.join(cls_path,x))]
         v_allname.sort()
-        len_data = [len(glob.glob(os.path.join(cls_path,x,'img_0*'))) for x in v_allname]
+        len_data = [len(glob.glob(os.path.join(cls_path,x,'flow_x*'))) for x in v_allname]
         split_idx = int(len(v_allname)*ratio)
 
         v_len_name = [[l,os.path.join(cls,x)] for l,x in zip(len_data,v_allname)]

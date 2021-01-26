@@ -11,19 +11,21 @@ import mmcv
 from mmaction import datasets
 import numpy as np
 from mmaction.datasets import build_dataloader
-from mmcv.runner import obj_from_dict
+from mmcv.runner import obj_from_dict,load_checkpoint
 
 
 py_file_root= os.path.dirname(__file__)
 
 class Recognize():
     def __init__(self,rgb_model_path,flow_model_path=None,
-                 rgb_config_path=py_file_root+'/configs/TSN/my_data/tsn_rgb_sknet.py',
-                 flow_config_path=py_file_root+'/configs/TSN/my_data/tsn_flow_sknet.py',
-                 classind_path=py_file_root+'/data/my_data/annotations/classInd.txt',):
+                 rgb_config_path=os.path.join(py_file_root,'configs/TSN/my_data/tsn_rgb_sknet.py'),
+                 flow_config_path=os.path.join(py_file_root,'configs/TSN/my_data/tsn_flow_sknet.py'),
+                 classind_path=os.path.join(py_file_root,'data/my_data/annotations/classInd.txt')):
         self.rgb_cfg = mmcv.Config.fromfile(rgb_config_path)
         self.flow_cfg = mmcv.Config.fromfile(flow_config_path)
-        self.rgb_model = build_recognizer(rgb_model_path, train_cfg=None, test_cfg=self.rgb_cfg.test_cfg)
+        self.rgb_model = build_recognizer(self.rgb_cfg.model, train_cfg=None, test_cfg=self.rgb_cfg.test_cfg)
+
+        load_checkpoint(self.rgb_model, rgb_model_path, map_location='cpu')
         '''TODO'''
         # self.flow_model = build_recognizer(flow_model_path, train_cfg=None, test_cfg=self.flow_cfg.test_cfg)
         #
@@ -34,7 +36,7 @@ class Recognize():
         if self.classind==None:
             raise ModuleNotFoundError("No classind file")
 
-    def run(self,video_path,flow_path,algorithm='rgb'):
+    def run(self,video_path,flow_path=None,algorithm='rgb'):
         assert algorithm in ['rgb','flow']
 
         if algorithm=='rgb':
@@ -50,7 +52,8 @@ class Recognize():
                 dist=False,
                 shuffle=False)
             with torch.no_grad():
-                data=data_loader.__next__()
+                data=iter(data_loader).__next__()
+                data = {k:data[k].data[0] for k in data.keys()}
                 result = self.rgb_model(return_loss=False, **data)
         else:
             ''' TODO '''
@@ -64,14 +67,14 @@ class Recognize():
             with torch.no_grad():
                 for data in enumerate(data_loader):
                     result = self.flow_model(return_loss=False, **data)
-        return self.classind[np.argmax(result.mean(axis=0),axis=1)]
+        return self.classind[np.argmax(result.mean(axis=0),axis=0)]
 
     def rgb_pre(self,video_path):
         video_name = os.path.basename(video_path)
         video_dir = os.path.dirname(video_path)
         img_root = os.path.join(video_dir,video_name.split('.')[0],'v_'+video_name.split('.')[0])
-        os.makedirs(img_root)
-        cmd = 'ffmpeg -i '+video_path +' '+img_root+'/' +'%img_05d.jpg'
+        os.makedirs(img_root,exist_ok=True)
+        cmd = 'ffmpeg -i '+video_path +' '+img_root+'/' +'img_%05d.jpg'
         len_img = len(glob.glob(os.path.join(img_root,'img_*.png')))
         os.system(cmd)
         test_split = os.path.join(video_dir,'test.txt')
@@ -80,8 +83,8 @@ class Recognize():
             f.writelines(' '.join(map(str,test_info)))
         return video_dir,test_split
 def test():
-    rgb_model_path = ''
-    video_path = ''
+    rgb_model_path = 'work_dirs/mydata/tsn_2d_rgb_sknet_seg_3_f1s1_b32_g8/latest.pth'
+    video_path = 'data/my_data/test.mov'
     model = Recognize(rgb_model_path)
     pre = model.run(video_path)
     print(pre)
