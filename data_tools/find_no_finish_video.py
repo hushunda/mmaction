@@ -6,7 +6,7 @@
 
 import os
 
-data_root = '../data/ucf101/rawframes'
+data_root = '../data/my_data/rawframes'
 out_txt = './nofinishvideo.txt'
 
 nofinish_video = []
@@ -17,7 +17,7 @@ for cls in os.listdir(data_root):
         nun_frames = len([x for x in all_data if x.startswith('img')])
         num_flow_x = len([x for x in all_data if x.startswith('flow_x')])
         num_flow_y = len([x for x in all_data if x.startswith('flow_y')])
-        if num_flow_x==num_flow_y and num_flow_x+1==nun_frames and num_flow_x>0:
+        if num_flow_x==num_flow_y:# and num_flow_x+2==nun_frames and num_flow_x>0:
             continue
         nofinish_video.append(os.path.join(cls,video_name))
 
