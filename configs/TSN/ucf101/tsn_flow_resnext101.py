@@ -4,8 +4,8 @@ model = dict(
     modality='Flow',
     in_channels=10,
     backbone=dict(
-        type='ResNet101',
-        pretrained='pretrain_model/resnet101.pth',
+        type='ResNeXt101',
+        pretrained='pretrain_model/resnext101.pth',
         bn_eval=False,
         partial_bn=True),
     spatial_temporal_module=dict(
@@ -120,7 +120,7 @@ log_config = dict(
 total_epochs = 340
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/tsn_2d_flow_resnet101_seg_3_f1s1_b32_g8_lr_0.005'
+work_dir = './work_dirs/tsn_2d_flow_resnext101'
 load_from = None
 resume_from = None
 
