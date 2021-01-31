@@ -30,7 +30,7 @@ def change_name():
                 idx = int(img_n.strip('frame').strip('.jpg'))
                 in_path = os.path.join(src_root,'u',file,img_n)
                 out_path = os.path.join(out_root,all_file[file])
-                #os.makedirs(out_path,exist_ok=True)
+                # os.makedirs(out_path,exist_ok=True)
                 shutil.move(in_path, os.path.join(out_path,'flow_x_%0.5d.jpg'%idx))
 
     ## y
@@ -42,7 +42,7 @@ def change_name():
                 idx = int(img_n.strip('frame').strip('.jpg'))
                 in_path = os.path.join(src_root,'v',file,img_n)
                 out_path = os.path.join(out_root, all_file[file])
-                os.makedirs(out_path, exist_ok=True)
+                # os.makedirs(out_path, exist_ok=True)
                 shutil.move(in_path, os.path.join(out_path, 'flow_y_%0.5d.jpg' % idx))
 
 def change_HandstandPushups_name():
