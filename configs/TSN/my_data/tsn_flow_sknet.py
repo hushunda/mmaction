@@ -20,7 +20,7 @@ model = dict(
         with_avg_pool=False,
         temporal_feature_size=1,
         spatial_feature_size=1,
-        dropout_ratio=0.7,
+        dropout_ratio=0.3,
         in_channels=2048,
         num_classes=10))
 train_cfg = None
@@ -29,7 +29,7 @@ test_cfg = None
 dataset_type = 'RawFramesDataset'
 data_root = 'data/my_data/rawframes'
 img_norm_cfg = dict(
-    mean=[116.3], std=[57.1], to_rgb=False)
+    mean=[116.3], std=[1], to_rgb=False)
 data = dict(
     videos_per_gpu=8,
     workers_per_gpu=4,
@@ -50,7 +50,7 @@ data = dict(
         flip_ratio=0.5,
         resize_keep_ratio=True,
         oversample=None,
-        random_crop=False,
+        random_crop=True,
         more_fix_crop=False,
         multiscale_crop=True,
         scales=[1, 0.875, 0.75, 0.66],
@@ -99,7 +99,7 @@ data = dict(
         multiscale_crop=False,
         test_mode=True))
 # optimizer
-optimizer = dict(type='SGD', lr=0.005, momentum=0.9, weight_decay=0.0005)
+optimizer = dict(type='SGD', lr=0.0005, momentum=0.9, weight_decay=0.0005)
 optimizer_config = dict(grad_clip=dict(max_norm=20, norm_type=2))
 # learning policy
 lr_config = dict(
@@ -121,7 +121,7 @@ total_epochs = 340
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/mydata/tsn_2d_flow_sknet_seg_3_f1s1_b32_g8_lr_0.005'
-load_from = 'work_dirs/tsn_2d_flow_sknet_seg_3_f1s1_b32_g8_lr_0.005/latest.pth'
+load_from = 'work_dirs/tsn_2d_flow_sknet_seg_3_f1s1_b32_g8_lr_0.005_std1/latest.pth'
 resume_from = None
 
 

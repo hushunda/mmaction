@@ -20,7 +20,7 @@ model = dict(
         with_avg_pool=False,
         temporal_feature_size=1,
         spatial_feature_size=1,
-        dropout_ratio=0.7,
+        dropout_ratio=0.3,
         in_channels=1024,
         num_classes=10))
 train_cfg = None
@@ -50,7 +50,7 @@ data = dict(
         flip_ratio=0.5,
         resize_keep_ratio=True,
         oversample=None,
-        random_crop=False,
+        random_crop=True,
         more_fix_crop=False,
         multiscale_crop=True,
         scales=[1, 0.875, 0.75, 0.66],
@@ -99,7 +99,7 @@ data = dict(
         multiscale_crop=False,
         test_mode=True))
 # optimizer
-optimizer = dict(type='SGD', lr=0.005, momentum=0.9, weight_decay=0.0005)
+optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0005)
 optimizer_config = dict(grad_clip=dict(max_norm=20, norm_type=2))
 # learning policy
 lr_config = dict(
