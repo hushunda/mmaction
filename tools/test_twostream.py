@@ -34,7 +34,7 @@ def main():
     for k in rgb_info.keys():
         assert k in flow_info
 
-    ratio = 1.1
+    ratio = 1.5
     gt_lable = []
     out_pred = []
     for k in rgb_info.keys():

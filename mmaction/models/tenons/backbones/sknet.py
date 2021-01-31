@@ -39,8 +39,11 @@ class SKnet101(nn.Module):
             c = checkpoint['state_dict']
             new_checkpoint = OrderedDict()
             for k in c:
-                n_k =  k[7:]
-                new_checkpoint[n_k] = c[k]
+                if 'module' in k:
+                    n_k = k[7:]
+                    new_checkpoint[n_k] = c[k]
+                else:
+                    new_checkpoint[k] = c[k]
             self.model.load_state_dict(new_checkpoint)
 
         elif self.pretrained is None:

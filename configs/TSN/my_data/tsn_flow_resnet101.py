@@ -6,7 +6,7 @@ model = dict(
     backbone=dict(
         type='ResNet101',
         pretrained='pretrain_model/resnet101.pth',
-        bn_eval=False,
+        bn_eval=True,
         partial_bn=True),
     spatial_temporal_module=dict(
         type='SimpleSpatialModule',
@@ -22,14 +22,14 @@ model = dict(
         spatial_feature_size=1,
         dropout_ratio=0.7,
         in_channels=2048,
-        num_classes=101))
+        num_classes=10))
 train_cfg = None
 test_cfg = None
 # dataset settings
 dataset_type = 'RawFramesDataset'
 data_root = 'data/my_data/rawframes'
 img_norm_cfg = dict(
-    mean=[123.7, 116.3, 103.53], std=[58.4, 57.1, 57.4], to_rgb=False)
+    mean=[116.3], std=[57.1], to_rgb=False)
 data = dict(
     videos_per_gpu=8,
     workers_per_gpu=4,
@@ -121,7 +121,7 @@ total_epochs = 340
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/mydata/tsn_2d_flow_resnet101_seg_3_f1s1_b32_g8_lr_0.005'
-load_from = None
+load_from = 'work_dirs/tsn_2d_flow_resnet101_seg_3_f1s1_b32_g8_lr_0.005/latest.pth'
 resume_from = None
 
 

@@ -9,6 +9,7 @@ from .resnet_i3d_slowfast import ResNet_I3D_SlowFast
 from .resnet_r3d import ResNet_R3D
 from .c3d import C3D
 from .resnet101 import ResNet101
+from .resnext101 import ResNeXt101
 
 __all__ = [
     'BNInception',
@@ -21,7 +22,7 @@ __all__ = [
     'SKnet101',
     'C3D',
     'ResNet101',
-
+    'ResNeXt101',
 ]
 
 

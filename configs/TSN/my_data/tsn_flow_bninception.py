@@ -6,7 +6,7 @@ model = dict(
     backbone=dict(
         type='BNInception',
         pretrained='pretrain_model/bn_inception.pth',
-        bn_eval=False,
+        bn_eval=True,
         partial_bn=True),
     spatial_temporal_module=dict(
         type='SimpleSpatialModule',
@@ -20,9 +20,9 @@ model = dict(
         with_avg_pool=False,
         temporal_feature_size=1,
         spatial_feature_size=1,
-        dropout_ratio=0.7,
+        dropout_ratio=0.3,
         in_channels=1024,
-        num_classes=101))
+        num_classes=10))
 train_cfg = None
 test_cfg = None
 # dataset settings
@@ -50,7 +50,7 @@ data = dict(
         flip_ratio=0.5,
         resize_keep_ratio=True,
         oversample=None,
-        random_crop=False,
+        random_crop=True,
         more_fix_crop=False,
         multiscale_crop=True,
         scales=[1, 0.875, 0.75, 0.66],
@@ -99,7 +99,7 @@ data = dict(
         multiscale_crop=False,
         test_mode=True))
 # optimizer
-optimizer = dict(type='SGD', lr=0.005, momentum=0.9, weight_decay=0.0005)
+optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0005)
 optimizer_config = dict(grad_clip=dict(max_norm=20, norm_type=2))
 # learning policy
 lr_config = dict(
@@ -121,7 +121,7 @@ total_epochs = 340
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/mydata/tsn_2d_flow_bninception_seg_3_f1s1_b32_g8_lr_0.005'
-load_from = None
+load_from = 'work_dirs/tsn_2d_flow_bninception_seg_3_f1s1_b32_g8_lr_0.005/latest.pth'
 resume_from = None
 
 
