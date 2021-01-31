@@ -10,12 +10,21 @@ import os
 
 src_root = '../data/hmdb51/tvl1_flow/'
 out_root = '../data/hmdb51/rawframes/'
+index_path = '../data/hmdb51/hmdb51_%s_split_1_rawframes.txt'
+
+all_file = []
+for phase in ['train','test']:
+    a = [x.strip().split(' ')[0] for x in open(index_path%phase,'rb').readlines()]
+    all_file.extend(a)
+
+all_file = {x.split('/')[1]:x for x in all_file}
 
 
 def change_name():
     ## x
     for file in os.listdir(os.path.join(src_root,'u')):
         if file.endswith('.bin'):continue
+        if file not in all_file: continue
         for img_n in os.listdir(os.path.join(src_root,'u',file)):
             if img_n.endswith('.jpg'):
                 idx = int(img_n.strip('frame').strip('.jpg'))
@@ -27,11 +36,12 @@ def change_name():
     ## y
     for file in os.listdir(os.path.join(src_root,'v')):
         if file.endswith('.bin'):continue
+        if file not in all_file: continue
         for img_n in os.listdir(os.path.join(src_root,'v',file)):
             if img_n.endswith('.jpg'):
                 idx = int(img_n.strip('frame').strip('.jpg'))
                 in_path = os.path.join(src_root,'v',file,img_n)
-                out_path = os.path.join(out_root, file.split('_')[1], file)
+                out_path = os.path.join(out_root, all_file[file])
                 os.makedirs(out_path, exist_ok=True)
                 shutil.move(in_path, os.path.join(out_path, 'flow_y_%0.5d.jpg' % idx))
 
@@ -50,7 +60,7 @@ def change_HandstandPushups_name():
 
 if __name__ == '__main__':
     change_name()
-    change_HandstandPushups_name()
+    # change_HandstandPushups_name()
 
 
 
