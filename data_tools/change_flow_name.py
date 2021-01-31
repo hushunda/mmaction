@@ -13,8 +13,8 @@ out_root = '../data/hmdb51/rawframes/'
 index_path = '../data/hmdb51/hmdb51_%s_split_1_rawframes.txt'
 
 all_file = []
-for phase in ['train','test']:
-    a = [x.strip().split(' ')[0] for x in open(index_path%phase,'rb').readlines()]
+for phase in ['train','val']:
+    a = [x.strip().split(' ')[0] for x in open(index_path%phase,'r').readlines()]
     all_file.extend(a)
 
 all_file = {x.split('/')[1]:x for x in all_file}
@@ -29,8 +29,8 @@ def change_name():
             if img_n.endswith('.jpg'):
                 idx = int(img_n.strip('frame').strip('.jpg'))
                 in_path = os.path.join(src_root,'u',file,img_n)
-                out_path = os.path.join(out_root,file.split('_')[1],file)
-                os.makedirs(out_path,exist_ok=True)
+                out_path = os.path.join(out_root,all_file[file])
+                # os.makedirs(out_path,exist_ok=True)
                 shutil.move(in_path, os.path.join(out_path,'flow_x_%0.5d.jpg'%idx))
 
     ## y
@@ -42,7 +42,7 @@ def change_name():
                 idx = int(img_n.strip('frame').strip('.jpg'))
                 in_path = os.path.join(src_root,'v',file,img_n)
                 out_path = os.path.join(out_root, all_file[file])
-                os.makedirs(out_path, exist_ok=True)
+                # os.makedirs(out_path, exist_ok=True)
                 shutil.move(in_path, os.path.join(out_path, 'flow_y_%0.5d.jpg' % idx))
 
 def change_HandstandPushups_name():
