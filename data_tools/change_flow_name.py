@@ -8,8 +8,8 @@
 import shutil
 import os
 
-src_root = '../data/ucf101/tvl1_flow/'
-out_root = '../data/ucf101/rawframes/'
+src_root = '../data/hmdb51/tvl1_flow/'
+out_root = '../data/hmdb51/rawframes/'
 
 
 def change_name():

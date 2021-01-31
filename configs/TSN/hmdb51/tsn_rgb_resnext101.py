@@ -2,8 +2,8 @@
 model = dict(
     type='TSN2D',
     backbone=dict(
-        type='BNInception',
-        pretrained='open-mmlab://bninception_caffe',
+        type='ResNeXt101',
+        pretrained='pretrain_model/sknet101.pth',
         bn_eval=False,
         partial_bn=True),
     spatial_temporal_module=dict(
@@ -19,7 +19,7 @@ model = dict(
         temporal_feature_size=1,
         spatial_feature_size=1,
         dropout_ratio=0.8,
-        in_channels=1024,
+        in_channels=2048,
         init_std=0.001,
         num_classes=51))
 train_cfg = None
@@ -28,11 +28,11 @@ test_cfg = None
 dataset_type = 'RawFramesDataset'
 data_root = 'data/hmdb51/rawframes'
 img_norm_cfg = dict(
-   mean=[104, 117, 128], std=[1, 1, 1], to_rgb=False)
+   mean=[123.7, 116.3, 103.53], std=[58.4, 57.1, 57.4], to_rgb=False)
 
 data = dict(
-    videos_per_gpu=32,
-    workers_per_gpu=2,
+    videos_per_gpu=16,
+    workers_per_gpu=8,
     train=dict(
         type=dataset_type,
         ann_file='data/hmdb51/hmdb51_train_split_1_rawframes.txt',
@@ -120,6 +120,6 @@ log_config = dict(
 total_epochs = 80
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/tsn_2d_rgb_bninception_seg_3_f1s1_b32_g8'
+work_dir = './work_dirs/hmdb51/tsn_2d_rgb_resnext'
 load_from = None
 resume_from = None

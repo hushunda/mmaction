@@ -3,7 +3,7 @@
 import logging
 import torch.nn as nn
 import torch
-
+import torchvision.datasets
 from collections import OrderedDict
 from mmcv.cnn import constant_init, kaiming_init
 from mmcv.runner import load_checkpoint

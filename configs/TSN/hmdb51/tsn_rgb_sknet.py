@@ -21,12 +21,12 @@ model = dict(
         dropout_ratio=0.8,
         in_channels=2048,
         init_std=0.001,
-        num_classes=101))
+        num_classes=51))
 train_cfg = None
 test_cfg = None
 # dataset settings
 dataset_type = 'RawFramesDataset'
-data_root = 'data/ucf101/rawframes'
+data_root = 'data/hmdb51/rawframes'
 img_norm_cfg = dict(
    mean=[123.7, 116.3, 103.53], std=[58.4, 57.1, 57.4], to_rgb=False)
 
@@ -35,7 +35,7 @@ data = dict(
     workers_per_gpu=8,
     train=dict(
         type=dataset_type,
-        ann_file='data/ucf101/ucf101_train_split_1_rawframes.txt',
+        ann_file='data/hmdb51/hmdb51_train_split_1_rawframes.txt',
         img_prefix=data_root,
         img_norm_cfg=img_norm_cfg,
         num_segments=3,
@@ -58,7 +58,7 @@ data = dict(
         test_mode=False),
     val=dict(
         type=dataset_type,
-        ann_file='data/ucf101/ucf101_val_split_1_rawframes.txt',
+        ann_file='data/hmdb51/hmdb51_val_split_1_rawframes.txt',
         img_prefix=data_root,
         img_norm_cfg=img_norm_cfg,
         num_segments=3,
@@ -79,7 +79,7 @@ data = dict(
         test_mode=False),
     test=dict(
         type=dataset_type,
-        ann_file='data/ucf101/ucf101_val_split_1_rawframes.txt',
+        ann_file='data/hmdb51/hmdb51_val_split_1_rawframes.txt',
         img_prefix=data_root,
         img_norm_cfg=img_norm_cfg,
         num_segments=25,
@@ -120,7 +120,7 @@ log_config = dict(
 total_epochs = 80
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/tsn_2d_rgb_sknet_seg_3_f1s1_b32_g8'
+work_dir = './work_dirs/hmdb51/tsn_2d_rgb_sknet'
 load_from = None
 resume_from = None
 

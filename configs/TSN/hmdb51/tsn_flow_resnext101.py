@@ -29,10 +29,10 @@ test_cfg = None
 dataset_type = 'RawFramesDataset'
 data_root = 'data/hmdb51/rawframes'
 img_norm_cfg = dict(
-    mean=[128], std=[1], to_rgb=False)
+    mean=[116.3], std=[1], to_rgb=False)
 data = dict(
-    videos_per_gpu=32,
-    workers_per_gpu=2,
+    videos_per_gpu=16,
+    workers_per_gpu=8,
     train=dict(
         type=dataset_type,
         ann_file='data/hmdb51/hmdb51_train_split_1_rawframes.txt',
@@ -120,6 +120,6 @@ log_config = dict(
 total_epochs = 340
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/tsn_2d_flow_bninception_seg_3_f1s1_b32_g8_lr_0.005'
+work_dir = './work_dirs/hmdb51/tsn_2d_flow_resnext'
 load_from = None
 resume_from = None
