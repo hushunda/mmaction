@@ -35,10 +35,10 @@ def change_name():
                 if not os.path.exists(out_path):
                     print(out_path)
                 i+=1
-                if os.path.exists(out_path+'/flow_x_%0.5d.jpg'%idx):
-                    continue
-                os.renames(in_path, os.path.join(out_path, 'flow_y_%0.5d.jpg' % idx))
-
+                #if os.path.exists(out_path+'/flow_x_%0.5d.jpg'%idx):
+                #    continue
+                os.renames(in_path, os.path.join(out_path, 'flow_x_%0.5d.jpg' % idx))
+    print(i)
     ## y
     for file in os.listdir(os.path.join(src_root,'v')):
         if file.endswith('.bin'):continue
