@@ -37,7 +37,7 @@ def change_name():
                 i+=1
                 if os.path.exists(out_path+'/flow_x_%0.5d.jpg'%idx):
                     continue
-                os.renames(in_path, os.path.join(out_path, 'flow_y_%0.5d.jpg' % idx))
+                os.renames(in_path, os.path.join(out_path, 'flow_x_%0.5d.jpg' % idx))
 
     ## y
     for file in os.listdir(os.path.join(src_root,'v')):
