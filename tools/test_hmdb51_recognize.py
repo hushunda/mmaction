@@ -126,13 +126,37 @@ def main():
     inter = all_epoch//num
     epoches = [all_epoch-inter*i for i in range(num-1)]
     epoches.append(1)
-    for i in epoches:
-        args.checkpoint = os.path.join(cfg.work_dir, 'epoch_%d.pth' % (i))
+
+    '''init'''
+    args.checkpoint = os.path.join(cfg.work_dir, 'epoch_%d.pth' % (1))
+
+    cfg = mmcv.Config.fromfile(args.config)
+    # set cudnn_benchmark
+    if cfg.get('cudnn_benchmark', False):
+        torch.backends.cudnn.benchmark = True
+    cfg.data.test.test_mode = True
+
+    # pass arg of fcn testing
+    if args.fcn_testing:
+        cfg.model.update({'fcn_testing': True})
+        cfg.model['cls_head'].update({'fcn_testing': True})
+
+    # for regular testing
+    if cfg.data.test.oversample == 'three_crop':
+        cfg.model.spatial_temporal_module.spatial_size = 8
+
+    dataset = obj_from_dict(cfg.data.test, datasets, dict(test_mode=True))
+
+    if args.launcher == 'none':
+        raise NotImplementedError("By default, we use distributed testing, so that launcher should be pytorch")
+    else:
+        distributed = True
+        init_dist(args.launcher, **cfg.dist_params)
+    for epoch in epoches:
+        args.checkpoint = os.path.join(cfg.work_dir, 'epoch_%d.pth' % (epoch))
 
         cfg = mmcv.Config.fromfile(args.config)
-        # set cudnn_benchmark
-        if cfg.get('cudnn_benchmark', False):
-            torch.backends.cudnn.benchmark = True
+
         cfg.data.test.test_mode = True
 
         # pass arg of fcn testing
@@ -143,14 +167,6 @@ def main():
         # for regular testing
         if cfg.data.test.oversample == 'three_crop':
             cfg.model.spatial_temporal_module.spatial_size = 8
-
-        dataset = obj_from_dict(cfg.data.test, datasets, dict(test_mode=True))
-
-        if args.launcher == 'none':
-            raise NotImplementedError("By default, we use distributed testing, so that launcher should be pytorch")
-        else:
-            distributed = True
-            init_dist(args.launcher, **cfg.dist_params)
 
         model = build_recognizer(cfg.model, train_cfg=None, test_cfg=cfg.test_cfg)
         data_loader = build_dataloader(
@@ -186,7 +202,7 @@ def main():
                 pre.append(outputs[i])
 
             save_data = {path: [p, g] for path, p, g in zip(data_path, pre, gt_labels)}
-            with open(os.path.join(cfg.work_dir, 'test_%d.pkl'%i), 'wb') as f:
+            with open(os.path.join(cfg.work_dir, 'test_%d.pkl'%epoch), 'wb') as f:
                 pickle.dump(save_data, f)
 
             if args.use_softmax:
@@ -198,7 +214,7 @@ def main():
                 results = [res.mean(axis=0) for res in outputs]
             top1, top5 = top_k_accuracy(results, gt_labels, k=(1, 5))
             mean_acc = mean_class_accuracy(results, gt_labels)
-            with open(os.path.join(cfg.work_dir, 'test_accuracy_%d.txt'%i), 'w') as f:
+            with open(os.path.join(cfg.work_dir, 'test_accuracy_%d.txt'%epoch), 'w') as f:
                 f.writelines('model is :' + args.checkpoint + '\n')
                 f.writelines("Mean Class Accuracy = {:.04f}".format(mean_acc * 100) + '\n')
                 f.writelines("Top-1 Accuracy = {:.04f}".format(top1 * 100) + '\n')
