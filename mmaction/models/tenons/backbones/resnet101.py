@@ -8,64 +8,64 @@ from collections import OrderedDict
 from mmcv.cnn import constant_init, kaiming_init
 from mmcv.runner import load_checkpoint
 
-from ...registry import BACKBONES
-__all__ = ['ResNet101']
+# from ...registry import BACKBONES
+# __all__ = ['ResNet101']
 
 
-@BACKBONES.register_module
-class ResNet101(nn.Module):
-    def __init__(self,
-                 pretrained=None,
-                 bn_eval=True,
-                 bn_frozen=False,
-                 partial_bn=False):
-        super(ResNet101, self).__init__()
-        self.model = resnet101()
-        self.pretrained = pretrained
-        self.bn_eval = bn_eval
-        self.bn_frozen = bn_frozen
-        self.partial_bn = partial_bn
-
-    def init_weights(self):
-        if isinstance(self.pretrained, str):
-            logger = logging.getLogger()
-            #load_checkpoint(self, self.pretrained, strict=False, logger=logger)
-            checkpoint = torch.load(self.pretrained)
-            c = checkpoint['state_dict']
-            new_checkpoint = OrderedDict()
-            for k in c:
-                if 'module' in k:
-                    n_k = k[7:]
-                    new_checkpoint[n_k] = c[k]
-                else:
-                    new_checkpoint[k] = c[k]
-            self.model.load_state_dict(new_checkpoint)
-        elif self.pretrained is None:
-            for m in self.modules():
-                if isinstance(m, nn.Conv2d):
-                    kaiming_init(m)
-                elif isinstance(m, nn.BatchNorm2d):
-                    constant_init(m, 1)
-
-    def forward(self, input):
-        out = self.model(input)
-        return out
-
-    def train(self, mode=True):
-        super(ResNet101, self).train(mode)
-        if self.bn_eval:
-            for m in self.modules():
-                if isinstance(m, nn.BatchNorm2d):
-                    m.eval()
-                    if self.bn_frozen:
-                        for params in m.parameters():
-                            params.requires_grad = False
-        if self.partial_bn:
-            for n, m in self.named_modules():
-                if 'conv1' not in n and isinstance(m, nn.BatchNorm2d):
-                    m.eval()
-                    m.weight.requires_grad = False
-                    m.bias.requires_grad = False
+# @BACKBONES.register_module
+# class ResNet101(nn.Module):
+#     def __init__(self,
+#                  pretrained=None,
+#                  bn_eval=True,
+#                  bn_frozen=False,
+#                  partial_bn=False):
+#         super(ResNet101, self).__init__()
+#         self.model = resnet101()
+#         self.pretrained = pretrained
+#         self.bn_eval = bn_eval
+#         self.bn_frozen = bn_frozen
+#         self.partial_bn = partial_bn
+#
+#     def init_weights(self):
+#         if isinstance(self.pretrained, str):
+#             logger = logging.getLogger()
+#             #load_checkpoint(self, self.pretrained, strict=False, logger=logger)
+#             checkpoint = torch.load(self.pretrained)
+#             c = checkpoint['state_dict']
+#             new_checkpoint = OrderedDict()
+#             for k in c:
+#                 if 'module' in k:
+#                     n_k = k[7:]
+#                     new_checkpoint[n_k] = c[k]
+#                 else:
+#                     new_checkpoint[k] = c[k]
+#             self.model.load_state_dict(new_checkpoint)
+#         elif self.pretrained is None:
+#             for m in self.modules():
+#                 if isinstance(m, nn.Conv2d):
+#                     kaiming_init(m)
+#                 elif isinstance(m, nn.BatchNorm2d):
+#                     constant_init(m, 1)
+#
+#     def forward(self, input):
+#         out = self.model(input)
+#         return out
+#
+#     def train(self, mode=True):
+#         super(ResNet101, self).train(mode)
+#         if self.bn_eval:
+#             for m in self.modules():
+#                 if isinstance(m, nn.BatchNorm2d):
+#                     m.eval()
+#                     if self.bn_frozen:
+#                         for params in m.parameters():
+#                             params.requires_grad = False
+#         if self.partial_bn:
+#             for n, m in self.named_modules():
+#                 if 'conv1' not in n and isinstance(m, nn.BatchNorm2d):
+#                     m.eval()
+#                     m.weight.requires_grad = False
+#                     m.bias.requires_grad = False
 
 
 def conv3x3(in_planes, out_planes, stride=1):
@@ -206,9 +206,13 @@ class ResNet(nn.Module):
         x = self.maxpool(x)
 
         x = self.layer1(x)
+        print(x.shape)
         x = self.layer2(x)
+        print(x.shape)
         x = self.layer3(x)
+        print(x.shape)
         x = self.layer4(x)
+        print(x.shape)
 
         # x = self.avgpool(x)
         # x = x.view(x.size(0), -1)
